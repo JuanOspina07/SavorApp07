@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import {
   RiHome6Line,
   RiPercentLine,
@@ -9,8 +10,15 @@ import {
   RiLogoutCircleRLine,
 } from "react-icons/ri";
 
-const Sidebar = (props) => {
-  const { showMenu } = props;
+const Sidebar = ({ showMenu, setAuth }) => {
+  const navigate = useNavigate(); // Inicializar useNavigate
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated"); // Eliminar autenticación
+    setAuth(false); // Actualizar estado de autenticación
+    navigate("/"); // Redirigir al login
+    
+  };
 
   return (
     <div
@@ -21,9 +29,21 @@ const Sidebar = (props) => {
       <div>
         <ul className="pl-4">
           <li>
-            <h1 className="text-2xl text-gray-300 uppercase font-bold text-center my-5">
-              Logo
-            </h1>
+            <button
+              onClick={handleLogout}
+              
+              style={{
+                marginLeft: "3px",
+                color: "white",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                width: "100%",
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Cerrar sesión
+            </button>
           </li>
           <li className="bg-[#262837] p-4 rounded-tl-xl rounded-bl-xl">
             <a
@@ -78,12 +98,12 @@ const Sidebar = (props) => {
       <div>
         <ul className="pl-4">
           <li className="hover:bg-[#262837] p-4 rounded-tl-xl rounded-bl-xl group transition-colors">
-            <a
-              href="#"
+            <button
+              onClick={handleLogout}
               className="group-hover:bg-[#ec7c6a] p-4 flex justify-center rounded-xl text-[#ec7c6a] group-hover:text-white transition-colors"
             >
               <RiLogoutCircleRLine className="text-2xl" />
-            </a>
+            </button>
           </li>
         </ul>
       </div>

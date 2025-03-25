@@ -1,0 +1,176 @@
+.PaginaRegistro{
+    color: var(--color-blanco);
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+  }
+   .Fondo2{
+    position: absolute;
+    top: 100px;
+    left: 0PX;
+   }
+  
+
+  .ima12{
+    position: absolute;
+    top: -60px;
+    left: 0PX;
+   
+   }
+   .ima13{
+    position: absolute;
+    top: 380px;
+    left: 0px;
+    z-index: 2;
+   }
+   .ima14{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 2;
+   }
+  .container2 {
+    position: absolute;
+    width: 30%;
+    height: 85%;
+    overflow-y: auto; /* Activa el scroll cuando el contenido es muy grande */
+    top: 8%;
+    right: 17%;
+    justify-content: center;
+    align-content: center;
+    background: var(--color-gris);
+    padding: 20px;
+    border-radius: 40px;
+    box-sizing: border-box;
+    box-shadow: var(--sombra-dorada);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .container2:hover {
+    transform: scale(1.08);
+  }
+  
+  /* Título */
+  .container2 h2 {
+    color: var(--color-dorado);
+    text-align: center;
+    letter-spacing: 4px;
+    font-size: 30px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+    text-transform: uppercase;
+  }
+  
+  /* Campos de entrada */
+  .container2 .UserBox2 {
+    position: relative;
+  }
+  
+  .container2 .UserBox2 input {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 35px 0;
+    font-size: 20px;
+  }
+  
+  .inputfield2 {
+    width: 100%;
+    height: 55px;
+    background: transparent;
+    padding-inline: 20px 50px;
+    border: 2px solid var(--color-dorado);
+    border-radius: 30px;
+    outline: none;
+  }
+  
+  .label2 {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    transition: 0.2s;
+  
+  }
+  
+  .container2 .UserBox2 .label2 {
+    position: absolute;
+    top: 10px;
+    left: 10;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
+  }
+  
+  .container2 .UserBox2 input:focus~label,
+  .container2 .UserBox2 input:valid~label {
+    top: -35px;
+    left: 0;
+    color: var(--color-blanco);
+    font-size: 12px;
+  
+  }
+  
+  .container2 form {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+    transition: .5s;
+    letter-spacing: 4px;
+  
+  }
+  
+  .btresg {
+    background: var(--color-dorado);
+    color: var(--color-blanco);
+    padding: 10px;
+    margin-top: 0px;
+    width: 90%;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+  }
+  
+  .btresg:hover {
+    background: #b79528;
+    box-shadow: var(--sombra-dorada);
+  }
+/* Para navegadores basados en WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  
+  /* Para Firefox */
+  html {
+    scrollbar-width: none;
+  }
+  
+  /* Para Internet Explorer y Edge */
+  body {
+    -ms-overflow-style: none;
+  }
+.Lr{
+    width: 120px;
+    position: absolute;
+    right: 40px;
+    bottom: 20px;
+    z-index: 2;
+    background-color: transparent;
+    border: none;
+    transition: none;
+    outline: none;
+  }
+img{
+  outline: none;
+}
