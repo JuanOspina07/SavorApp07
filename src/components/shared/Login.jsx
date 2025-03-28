@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Importar axios para hacer peticiones
 import "../Styles/Login.css";
 
+
 function Login({ setAuth }) {
   const navigate = useNavigate();
   const [nombreUsuario, setNombreUsuario] = useState("");
@@ -18,7 +19,6 @@ function Login({ setAuth }) {
         nombreUsuario,
         contraseña,
       });
-      console.log(setError('ERROR'))
 
       if (response.data.success) {
         const { idRol } = response.data.user;
@@ -26,19 +26,27 @@ function Login({ setAuth }) {
         localStorage.setItem("idRol", idRol);
         setAuth(true);
 
-        if (idRol === 1) {
-          navigate("/productos");
-        } else if (idRol === 2) {
-          navigate("/admin");
-        } else if (idRol === 3) {
-          navigate("/cocinero");
-        } else {
-          setError("Rol no reconocido");
+        // Redirigir basado en el idRol y forzar recarga
+        switch (idRol) {
+          case 1:
+            navigate("/admin");
+            break;
+          case 2:
+            navigate("/menu");
+            break;
+          case 3:
+            navigate("/cocinero");
+            break;
+          default:
+            setError("Rol no reconocido");
+            return;
         }
+
+        window.location.reload(); // Forzar recarga para aplicar cambios
       } else {
         setError(response.data.message);
       }
-    }  catch (error) {
+    } catch (error) {
       setError("Error al iniciar sesión. Verifica tus credenciales.");
     }
   };
