@@ -31,7 +31,7 @@ body::before {
   z-index: -1;
 }
 
-.container {
+.ContainerLogin {
   position: absolute;
   width: 30%;
   height: 60%;
@@ -48,12 +48,12 @@ body::before {
   transition: transform 0.3s ease-in-out;
 }
 
-.container:hover {
+.ContainerLogin:hover {
   transform: scale(1.10);
 }
 
 /* Título */
-.container h2 {
+.ContainerLogin h2 {
   color: var(--color-dorado);
   text-align: center;
   text-transform: uppercase;
@@ -63,12 +63,12 @@ body::before {
 }
 
 /* Campos de entrada */
-.container .UserBox {
+.ContainerLogin .UserBox {
   position: relative;
 }
 
-.container .UserBox input {
-  width: 80%;
+.ContainerLogin .UserBox .inputfield {
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin: 30px 0;
@@ -94,7 +94,7 @@ label {
 
 }
 
-.container .UserBox label {
+.ContainerLogin .UserBox label {
   position: absolute;
   top: 10px;
   left: 10;
@@ -105,8 +105,8 @@ label {
   transition: .5s;
 }
 
-.container .UserBox input:focus~label,
-.container .UserBox input:valid~label {
+.ContainerLogin .UserBox .inputfield:focus~label,
+.ContainerLogin .UserBox .inputfield:valid~label {
   top: -35px;
   left: 0;
   color: var(--color-blanco);
@@ -114,7 +114,7 @@ label {
 
 }
 
-.container form {
+.ContainerLogin form {
   position: relative;
   display: inline-block;
   padding: 10px 20px;
