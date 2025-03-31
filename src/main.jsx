@@ -29,13 +29,13 @@ function MainRouter() {
           </>
         ) : (
           <>
-            {idRol === 1 && <Route path="/admin" element={<AdminPage />} />}
+            {idRol === 1 && <Route path="/menu" element={<App />} />}
             {idRol === 2 && <Route path="/menu" element={<App />} />}
             {idRol === 3 && <Route path="/cocinero" element={<CocineroPage />} />}
 
             {/* Redirección basada en el idRol */}
             <Route path="*" element={<Navigate to={
-              idRol === 1 ? "/admin" :
+              idRol === 1 ? "/menu" :
               idRol === 2 ? "/menu" :
               idRol === 3 ? "/cocinero" : "/"
             } />} />

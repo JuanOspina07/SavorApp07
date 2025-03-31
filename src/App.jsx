@@ -1,137 +1,63 @@
-import { useState } from "react";
-import {
-  RiMenu3Fill,
-  RiUser3Line,
-  RiAddLine,
-  RiPieChartLine,
-  RiCloseLine,
-  RiArrowDownSLine,
-} from "react-icons/ri";
-// Components
+import { useState, useEffect } from "react";
 import Sidebar from "./components/shared/Sidebar";
-import Car from "./components/shared/Car";
 import Header from "./components/shared/Header";
-import Card from "./components/shared/Card";
+import "./components/Styles/App.css";
 
 function App() {
   const [showMenu, setShowMenu] = useState(false);
-  const [showOrder, setShowOrder] = useState(false);
+  const [categorias, setCategorias] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-    setShowOrder(false);
-  };
+  // Obtener categorías
+  useEffect(() => {
+    fetch("http://localhost:4000/api/categorias")
+      .then((response) => response.json())
+      .then((data) => setCategorias(data))
+      .catch((error) => console.error("Error al cargar categorías:", error));
+  }, []);
 
-  const toggleOrders = () => {
-    setShowOrder(!showOrder);
-    setShowMenu(false);
-  };
+  // Obtener productos cuando cambia la categoría
+  useEffect(() => {
+    if (categoriaSeleccionada !== null) {
+      fetch(`http://localhost:4000/api/productos?categoria=${categoriaSeleccionada}`)
+        .then((response) => response.json())
+        .then((data) => setProductos(data))
+        .catch((error) => console.error("Error al cargar productos:", error));
+    }
+  }, [categoriaSeleccionada]);
 
   return (
-    <div className="bg-[#262837] w-full min-h-screen">
+    <div className="container3">
       <Sidebar showMenu={showMenu} />
-      <Car showOrder={showOrder} setShowOrder={setShowOrder} />
-      {/* Menu movil */}
-      <nav className="bg-[#1F1D2B] lg:hidden fixed w-full bottom-0 left-0 text-3xl text-gray-400 py-2 px-8 flex items-center justify-between rounded-tl-xl rounded-tr-xl">
-        <button className="p-2">
-          <RiUser3Line />
-        </button>
-        <button className="p-2">
-          <RiAddLine />
-        </button>
-        <button onClick={toggleOrders} className="p-2">
-          <RiPieChartLine />
-        </button>
-        <button onClick={toggleMenu} className="text-white p-2">
-          {showMenu ? <RiCloseLine /> : <RiMenu3Fill />}
-        </button>
-      </nav>
-      <main className="lg:pl-32 lg:pr-96 pb-20">
-        <div className="md:p-8 p-4">
-          {/* Header */}
-          <Header />
-          {/* Title content */}
-          <div className="flex items-center justify-between mb-16">
-            <h2 className="text-xl text-gray-300">Choose Dishes</h2>
-            <button className="flex items-center gap-4 text-gray-300 bg-[#1F1D2B] py-2 px-4 rounded-lg">
-              <RiArrowDownSLine /> Dine in
-            </button>
+      <div className="header3">
+        <Header />
+      </div>
+      
+      {/* Botones de Categorías */}
+      <div className="categories-container">
+        {categorias.map((categoria) => (
+          <button 
+            key={categoria.IdCategoria} 
+            className={`button32 ${categoriaSeleccionada === categoria.IdCategoria ? "active" : ""}`}
+            onClick={() => setCategoriaSeleccionada(categoria.IdCategoria)}
+          >
+            {categoria.Nombre}
+          </button>
+        ))}
+      </div>
+
+      {/* Lista de Productos */}
+      <div className="products-container">
+        {productos.map((producto) => (
+          <div key={producto.idProducto} className="product-card">
+            <img src={producto.Imagen}  className="product-image" />
+            <h3>{producto.Nombre}</h3>
+            <p>{producto.Descripcion}</p>
+            <span>${producto.Precio}</span>
           </div>
-          {/* Content */}
-          <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
-            {/* Card */}
-            <Card
-              img="comida.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="dish.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="comida.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="dish.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="comida.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="dish.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="comida.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="dish.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="comida.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-            {/* Card */}
-            <Card
-              img="dish.png"
-              description="Speacy seasoned seafood nodles"
-              price="2.29"
-              inventory="20"
-            />
-          </div>
-        </div>
-      </main>
+        ))}
+      </div>
     </div>
   );
 }

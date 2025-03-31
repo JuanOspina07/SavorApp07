@@ -10,6 +10,7 @@ function Login({ setAuth }) {
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState("");
 
+
   const handleLogin = async (event) => {
     event.preventDefault();
     setError("");
@@ -21,15 +22,19 @@ function Login({ setAuth }) {
       });
 
       if (response.data.success) {
-        const { idRol } = response.data.user;
+        const { idRol, nombre, apellido } = response.data.user;
+      
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("idRol", idRol);
+        localStorage.setItem("nombre", nombre);
+        localStorage.setItem("apellido", apellido);
+      
         setAuth(true);
-
+        window.location.reload();
         // Redirigir basado en el idRol y forzar recarga
         switch (idRol) {
           case 1:
-            navigate("/admin");
+            navigate("/menu");
             break;
           case 2:
             navigate("/menu");
@@ -48,8 +53,8 @@ function Login({ setAuth }) {
       }
     } catch (error) {
       setError("Error al iniciar sesión. Verifica tus credenciales.");
-    }
   };
+};
 
   return (
     <div className="PaginaInicio">
