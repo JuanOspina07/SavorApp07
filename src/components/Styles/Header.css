@@ -57,4 +57,15 @@ header {
     border: none;
     outline: none;
   }
-  
+  .add-to-cart-btn2 {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    padding:8px; 
+    background-color: #d4af37;
+    color: #000;
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    font-weight: bold;
+  }

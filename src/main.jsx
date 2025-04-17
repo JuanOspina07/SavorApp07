@@ -1,10 +1,11 @@
+// src/main.jsx
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import App from "./App";
 import Login from "./components/shared/Login";
 import "./index.css";
-import Registro from "./components/shared/Registro";
+import Registro from "./components/shared/Registro";// Asegúrate de tener este componente
 
 function MainRouter() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -16,7 +17,7 @@ function MainRouter() {
 
     setIsAuthenticated(auth);
     setIdRol(rol ? parseInt(rol) : null);
-  }, [isAuthenticated]); // Se actualiza si cambia la autenticación
+  }, []); // Solo cargar al montar
 
   return (
     <Router>
@@ -29,24 +30,28 @@ function MainRouter() {
           </>
         ) : (
           <>
-            {idRol === 1 && <Route path="/menu" element={<App />} />}
-            {idRol === 2 && <Route path="/menu" element={<App />} />}
+            {idRol === 1 && <Route path="/menu" element={<App setAuth={setIsAuthenticated} />} />}
+            {idRol === 2 && <Route path="/menu" element={<App setAuth={setIsAuthenticated} />} />}
             {idRol === 3 && <Route path="/cocinero" element={<CocineroPage />} />}
 
-            {/* Redirección basada en el idRol */}
-            <Route path="*" element={<Navigate to={
-              idRol === 1 ? "/menu" :
-              idRol === 2 ? "/menu" :
-              idRol === 3 ? "/cocinero" : "/"
-            } />} />
+            <Route
+              path="*"
+              element={
+                <Navigate
+                  to={
+                    idRol === 1 ? "/menu" :
+                    idRol === 2 ? "/menu" :
+                    idRol === 3 ? "/cocinero" : "/"
+                  }
+                />
+              }
+            />
           </>
         )}
       </Routes>
     </Router>
   );
 }
-
-
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
