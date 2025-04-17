@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Importar axios para hacer peticiones
+import axios from "axios"; 
 import "../Styles/Login.css";
 
 
@@ -92,6 +92,16 @@ function Login({ setAuth }) {
               style={{ color: "#d4af37", cursor: "pointer" }}
             >
               Regístrate
+            </span>
+          </p>
+          <p className="link">
+            ¿Olvidaste tu contraseña?{" "}
+            <span
+              className="registro-link"
+              onClick={() => navigate("/RecuperarContraseña")}
+              style={{ color: "#d4af37", cursor: "pointer" }}
+            >
+              Recuperala
             </span>
           </p>
         </form>

@@ -6,6 +6,7 @@ import App from "./App";
 import Login from "./components/shared/Login";
 import "./index.css";
 import Registro from "./components/shared/Registro";// Asegúrate de tener este componente
+import RecuperarContrasena from "./components/shared/RecuperarContrasena";
 
 function MainRouter() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,6 +27,8 @@ function MainRouter() {
           <>
             <Route path="/" element={<Login setAuth={setIsAuthenticated} />} />
             <Route path="/Registro" element={<Registro />} />
+            <Route path="/RecuperarContraseña" element={<RecuperarContrasena />} />
+            <Route path="/recuperar/:token" element={<RecuperarContrasena />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         ) : (
