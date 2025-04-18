@@ -2,11 +2,13 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import App from "./App";
 import Login from "./components/shared/Login";
-import "./index.css";
-import Registro from "./components/shared/Registro";// Asegúrate de tener este componente
+import Registro from "./components/shared/Registro";
 import RecuperarContrasena from "./components/shared/RecuperarContrasena";
+import RestablecerContrasena from "./components/shared/RestablecerContrasena"; // ✅ Este era el que faltaba
+import "./index.css";
 
 function MainRouter() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,7 +20,7 @@ function MainRouter() {
 
     setIsAuthenticated(auth);
     setIdRol(rol ? parseInt(rol) : null);
-  }, []); // Solo cargar al montar
+  }, []);
 
   return (
     <Router>
@@ -29,6 +31,7 @@ function MainRouter() {
             <Route path="/Registro" element={<Registro />} />
             <Route path="/RecuperarContraseña" element={<RecuperarContrasena />} />
             <Route path="/recuperar/:token" element={<RecuperarContrasena />} />
+            <Route path="/restablecer/:token" element={<RestablecerContrasena />} /> {/* ✅ Ruta corregida */}
             <Route path="*" element={<Navigate to="/" />} />
           </>
         ) : (
@@ -36,7 +39,6 @@ function MainRouter() {
             {idRol === 1 && <Route path="/menu" element={<App setAuth={setIsAuthenticated} />} />}
             {idRol === 2 && <Route path="/menu" element={<App setAuth={setIsAuthenticated} />} />}
             {idRol === 3 && <Route path="/cocinero" element={<CocineroPage />} />}
-
             <Route
               path="*"
               element={

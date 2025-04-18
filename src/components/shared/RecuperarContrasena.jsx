@@ -1,39 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../Styles/Registro.css";
 
 const RecuperarContrasena = () => {
   const navigate = useNavigate();
-  const { token } = useParams();
 
-  const [tiposDocumento, setTiposDocumento] = useState([]);
-  const [selectedTipoDocumento, setSelectedTipoDocumento] = useState("");
-  const [numeroDocumento, setNumeroDocumento] = useState("");
   const [correo, setCorreo] = useState("");
-  const [nombreUsuario, setNombreUsuario] = useState("");
   const [nuevaContrasena, setNuevaContrasena] = useState("");
+  const [mensaje, setMensaje] = useState(""); // Para mostrar mensajes de error o éxito
 
-  // Cargar los tipos de documento desde la API
-  useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/tipos-documento")
-      .then((response) => setTiposDocumento(response.data))
-      .catch((error) =>
-        console.error("Error al obtener los tipos de documento:", error)
-      );
-  }, []);
+  const handleEmailSubmit = async (event) => {
+    event.preventDefault();
 
-  // Manejo del restablecimiento de la contraseña
+    try {
+      const response = await axios.post("http://localhost:4000/api/recuperar", { correo });
+
+      if (response.data.success) {
+        alert("Se ha enviado un enlace de recuperación a tu correo");
+        navigate("/login");
+      } else {
+        setMensaje(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error al enviar el correo de recuperación:", error);
+      setMensaje("Ocurrió un error al enviar el enlace de recuperación");
+    }
+  };
+
   const handlePasswordReset = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:4000/api/recuperar", {
-        token,
-        tipoDocumento: selectedTipoDocumento,
-        numeroDocumento,
-        nombreUsuario,
+      const response = await axios.post("http://localhost:4000/api/restablecer-contrasena", {
         correo,
         nuevaContrasena,
       });
@@ -42,91 +41,72 @@ const RecuperarContrasena = () => {
         alert("Contraseña actualizada correctamente");
         navigate("/login");
       } else {
-        alert(`Error: ${response.data.message}`);
+        setMensaje(response.data.message);
       }
     } catch (error) {
       console.error("Error al restablecer la contraseña:", error);
-      alert("Ocurrió un error al restablecer la contraseña");
+      setMensaje("Ocurrió un error al restablecer la contraseña");
     }
   };
 
+
+  
   return (
     <div className="PaginaRegistro">
       <button className="Lr" onClick={() => navigate("/login")}>
         <img src="Flecha.png" alt="Volver" />
       </button>
-      <img className="ima12" src="SAV.png" alt="" />
-      <img className="ima13" src="OR.png" alt="" />
-      <img className="ima14" src="A.png" alt="" />
+
+      <img className="ima12" src="SAV.png" alt="Logo 1" />
+      <img className="ima13" src="OR.png" alt="Logo 2" />
+      <img className="ima14" src="A.png" alt="Logo 3" />
+
       <div className="container2">
-        <form onSubmit={handlePasswordReset}>
-          <h2>Recuperar Contraseña</h2>
+        {/* Si hay una contraseña nueva por cambiar */}
+        {nuevaContrasena ? (
+          <form onSubmit={handlePasswordReset}>
+            <h2>Restablecer Contraseña</h2>
 
-          <div className="UserBox2">
-            <select
-              required
-              className="inputfield2"
-              value={selectedTipoDocumento}
-              onChange={(e) => setSelectedTipoDocumento(e.target.value)}
-            >
-              <option value="">Seleccione un tipo de documento</option>
-              {tiposDocumento.map((tipo) => (
-                <option key={tipo.idTipoDocumento} value={tipo.idTipoDocumento}>
-                  {tipo.Nombre}
-                </option>
-              ))}
-            </select>
-            <label className="label2"></label>
-          </div>
+            <div className="UserBox2">
+              <input
+                type="password"
+                value={nuevaContrasena}
+                onChange={(e) => setNuevaContrasena(e.target.value)}
+                required
+                className="inputfield2"
+              />
+              <label className="label2">Nueva Contraseña</label>
+            </div>
 
-          <div className="UserBox2">
-            <input
-              type="number"
-              value={numeroDocumento}
-              onChange={(e) => setNumeroDocumento(e.target.value)}
-              required
-              className="inputfield2"
-            />
-            <label className="label2">Identificación</label>
-          </div>
+            {mensaje && <p className="mensaje-error">{mensaje}</p>}
 
-          <div className="UserBox2">
-            <input
-              type="text"
-              value={nombreUsuario}
-              onChange={(e) => setNombreUsuario(e.target.value)}
-              required
-              className="inputfield2"
-            />
-            <label className="label2">Usuario</label>
-          </div>
+            <button className="btresg" type="submit">
+              Actualizar Contraseña
+            </button>
+          </form>
+        ) : (
+          // Si no se ha recibido un correo, se solicita el correo para enviar el enlace
+          <form onSubmit={handleEmailSubmit}>
+            <h2>Recuperación de Contraseña</h2>
 
-          <div className="UserBox2">
-            <input
-              type="email"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              required
-              className="inputfield2"
-            />
-            <label className="label2">Correo</label>
-          </div>
+            <div className="UserBox2">
+              <input
+                type="email"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                required
+                className="inputfield2"
+              />
+              <label className="label2">Correo</label>
+            </div>
 
-          <div className="UserBox2">
-            <input
-              type="password"
-              value={nuevaContrasena}
-              onChange={(e) => setNuevaContrasena(e.target.value)}
-              required
-              className="inputfield2"
-            />
-            <label className="label2">Nueva Contraseña</label>
-          </div>
+            {mensaje && <p className="mensaje-error">{mensaje}</p>}
 
-          <button className="btresg" type="submit">
-            Actualizar Contraseña
-          </button>
-        </form>
+            <button className="btresg" type="submit">
+              Enviar Enlace de Recuperación
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
