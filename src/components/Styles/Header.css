@@ -69,3 +69,16 @@ header {
     cursor: pointer;
     font-weight: bold;
   }
+
+  .filter-btn {
+    position: absolute;
+    top: 2px;
+    right: 260px;
+    padding:8px; 
+    background-color: #d4af37;
+    color: #d4af37;
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    font-weight: bold;
+  }
