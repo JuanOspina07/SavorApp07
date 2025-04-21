@@ -3,11 +3,14 @@ import { RiSearch2Line } from "react-icons/ri";
 import "../Styles/Header.css";
 import QueryModal from "./QueryModal";
 
-const Header = ({ setShowCart, onSearch }) => {
+const Header = ({ setShowCart, onSearch, onFilter }) => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showQueryModal, setShowQueryModal] = useState(false);
+  const handleFilter = ({ min, max }) => {
+    onFilter({ min, max });
+  };
 
   useEffect(() => {
     setNombre(localStorage.getItem("nombre") || "");
@@ -20,14 +23,7 @@ const Header = ({ setShowCart, onSearch }) => {
     onSearch(value); 
   };
 
-  
-  ////////////////////////////////////////////////////////
-  //  FUNCION PARA APLICAR FILTROS SOLO FALTA LA LOGICA //
-  ////////////////////////////////////////////////////////
 
-  const handleFilter = ({ min, max }) => {
-    console.log("Filtrando productos entre", min, "y", max);
-  };
 
   return (
     <header>

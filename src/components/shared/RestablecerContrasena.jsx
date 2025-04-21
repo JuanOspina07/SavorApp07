@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import "../Styles/Registro.css";
 
 const RestablecerContrasena = () => {
   const { token } = useParams(); // Obtener el token desde la URL
@@ -49,24 +50,34 @@ const RestablecerContrasena = () => {
   };
 
   return (
-    <div>
+    <div  className="PaginaRegistro">
+      <img className="ima12"src="https://i.ibb.co/Pvt8CBD1/SAV.png" alt="Logo 1" />
+      <img className="ima13" src="https://i.ibb.co/1fMd82hg/OR.png"  alt="Logo 2" />
+      <img className="ima14"  src="https://i.ibb.co/sv2NwLns/A.png" alt="Logo 3" />
+      <div className="container2">
       <h2>Restablecer Contraseña</h2>
-      {mensaje && <p>{mensaje}</p>}
 
       {tokenValido && (
-        <form onSubmit={handlePasswordReset}>
-          <div>
-            <label>Nueva Contraseña</label>
-            <input
-              type="password"
-              value={nuevaContrasena}
-              onChange={(e) => setNuevaContrasena(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Restablecer Contraseña</button>
-        </form>
+         <form onSubmit={handlePasswordReset}>
+         
+
+         <div className="UserBox2">
+           <input
+             type="password"
+             value={nuevaContrasena}
+             onChange={(e) => setNuevaContrasena(e.target.value)}
+             required
+             className="inputfield2"
+           />
+           <label className="label2">Nueva Contraseña</label>
+         </div>
+
+         <button className="btresg" type="submit">
+           Actualizar Contraseña
+         </button>
+       </form>
       )}
+      </div>
     </div>
   );
 };

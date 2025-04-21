@@ -13,8 +13,13 @@ function App({ setAuth }) {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [priceFilter, setPriceFilter] = useState({ min: null, max: null });
   const [mensajeAgregado, setMensajeAgregado] = useState(false);
 
+// Esta función se pasa al Header y se activa desde QueryModal
+const handlePriceFilter = ({ min, max }) => {
+  setPriceFilter({ min, max });
+};
 
 
   useEffect(() => {
@@ -42,9 +47,21 @@ function App({ setAuth }) {
       .then((data) => Array.isArray(data) && setProductos(data))
       .catch((error) => console.error("Error filtrando productos", error));
   };
-  const productosFiltrados = productos.filter((producto) =>
+  const productosFiltrados = productos
+  .filter((producto) =>
     producto.Nombre.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  )
+  .filter((producto) => {
+    console.log("Filtrando con:", priceFilter);
+    const { min, max } = priceFilter;
+    const precio = Number(producto.Precio);
+
+
+    if (min != null && max != null) return precio >= min && precio <= max;
+    if (min != null) return precio >= min;
+    if (max != null) return precio <= max;
+    return true;
+  });
   
 
   const addToCart = (producto) => {
@@ -85,7 +102,7 @@ function App({ setAuth }) {
     <div className="container3">
       <Sidebar showMenu={showMenu} setAuth={setAuth} />
       <div className="header3">
-      <Header setShowCart={setShowCart} onSearch={setSearchQuery} />
+      <Header setShowCart={setShowCart} onSearch={setSearchQuery}  onFilter={handlePriceFilter}/>
       </div>
 
       {showCart && (

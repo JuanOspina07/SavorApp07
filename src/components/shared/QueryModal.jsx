@@ -8,9 +8,12 @@ const QueryModal = ({ isOpen, onClose, onFilter }) => {
 
   // FUNCION PARA APLCIAR FILTROS
   const handleFilter = () => {
-    onFilter({ min: parseFloat(minPrice), max: parseFloat(maxPrice) });
+    const min = minPrice ? parseFloat(minPrice) : null;
+    const max = maxPrice ? parseFloat(maxPrice) : null;
+    onFilter({ min, max });
     onClose(); 
   };
+  
 
   if (!isOpen) return null;
 

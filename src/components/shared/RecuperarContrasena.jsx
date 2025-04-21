@@ -62,30 +62,6 @@ const RecuperarContrasena = () => {
       <img className="ima14" src="A.png" alt="Logo 3" />
 
       <div className="container2">
-        {/* Si hay una contraseña nueva por cambiar */}
-        {nuevaContrasena ? (
-          <form onSubmit={handlePasswordReset}>
-            <h2>Restablecer Contraseña</h2>
-
-            <div className="UserBox2">
-              <input
-                type="password"
-                value={nuevaContrasena}
-                onChange={(e) => setNuevaContrasena(e.target.value)}
-                required
-                className="inputfield2"
-              />
-              <label className="label2">Nueva Contraseña</label>
-            </div>
-
-            {mensaje && <p className="mensaje-error">{mensaje}</p>}
-
-            <button className="btresg" type="submit">
-              Actualizar Contraseña
-            </button>
-          </form>
-        ) : (
-          // Si no se ha recibido un correo, se solicita el correo para enviar el enlace
           <form onSubmit={handleEmailSubmit}>
             <h2>Recuperación de Contraseña</h2>
 
@@ -106,7 +82,6 @@ const RecuperarContrasena = () => {
               Enviar Enlace de Recuperación
             </button>
           </form>
-        )}
       </div>
     </div>
   );
