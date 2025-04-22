@@ -1,7 +1,7 @@
 import React from "react";
 import "../Styles/Carrito.css";
-
-const Carrito = ({ cart, addToCart, removeFromCart, deleteFromCart, setShowCart }) => {
+const Carrito = ({ cart, addToCart, removeFromCart, deleteFromCart, setShowCart,
+  setMostrarPasarela, }) => {
     const total = cart.reduce((sum, item) => sum + item.Precio * item.cantidad, 0);
   
     return (
@@ -38,6 +38,10 @@ const Carrito = ({ cart, addToCart, removeFromCart, deleteFromCart, setShowCart 
             <div className="carrito-total">
               <h3>Total: ${total.toLocaleString()}</h3>
             </div>
+            <div>
+            <button className="compra" onClick={() => setMostrarPasarela(true)}>Comprar</button>
+            </div>
+            
           </div>
         )}
       </div>

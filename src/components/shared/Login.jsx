@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; 
 import "../Styles/Login.css";
 
-
 function Login({ setAuth }) {
   const navigate = useNavigate();
   const [nombreUsuario, setNombreUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState("");
-
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -23,19 +21,17 @@ function Login({ setAuth }) {
 
       if (response.data.success) {
         const { idRol, nombre, apellido } = response.data.user;
-      
+
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("idRol", idRol);
         localStorage.setItem("nombre", nombre);
         localStorage.setItem("apellido", apellido);
-      
+
         setAuth(true);
         window.location.reload();
-        // Redirigir basado en el idRol y forzar recarga
+
         switch (idRol) {
           case 1:
-            navigate("/menu");
-            break;
           case 2:
             navigate("/menu");
             break;
@@ -46,22 +42,19 @@ function Login({ setAuth }) {
             setError("Rol no reconocido");
             return;
         }
-
-        window.location.reload(); // Forzar recarga para aplicar cambios
       } else {
         setError(response.data.message);
       }
     } catch (error) {
       setError("Error al iniciar sesión. Verifica tus credenciales.");
+    }
   };
-};
 
   return (
     <div className="PaginaInicio">
       <img className="Fondo" src="SAVORA.png" alt="Logo Savora" />
       <div className="ContainerLogin">
         <h2>Login</h2>
-        {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleLogin}>
           <div className="UserBox">
             <input
@@ -82,30 +75,38 @@ function Login({ setAuth }) {
               onChange={(e) => setContraseña(e.target.value)}
             />
             <label>Password</label>
+            
           </div>
           <button className="button1" type="submit">Sign in</button>
-          <p className="link">
-            ¿No tienes cuenta?{" "}
-            <span
-              className="registro-link"
-              onClick={() => navigate("/Registro")}
-              style={{ color: "#d4af37", cursor: "pointer" }}
-            >
-              Regístrate
-            </span>
-          </p>
-          <p className="link">
-            ¿Olvidaste tu contraseña?{" "}
+          <p className="link2">
+            ¿Olvidaste tu contraseña?
             <span
               className="registro-link"
               onClick={() => navigate("/RecuperarContraseña")}
               style={{ color: "#d4af37", cursor: "pointer" }}
-            >
-              Recuperala
+            >  Recuperala
             </span>
           </p>
+          <p className="link">¿No tienes cuenta?   <span
+              className="registro-link"
+              onClick={() => navigate("/Registro")}
+              style={{ color: "#d4af37", cursor: "pointer" }}
+            >  Regístrate
+            </span>
+          </p>
+         
         </form>
       </div>
+
+      {/* MODAL DE ERROR */}
+      {error && (
+        <div className="modal-error">
+          <div className="modal-content">
+            <p>{error}</p>
+            <button onClick={() => setError("")}>Cerrar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

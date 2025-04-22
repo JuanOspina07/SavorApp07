@@ -98,7 +98,6 @@
     font-weight: bold;
     font-size: 18px;
     text-align: center;
-    border-bottom: 1px solid #fff;
   }
   .eliminar-item {
     width: 23px;
@@ -111,4 +110,23 @@
   .eliminar-item:hover {
     transform: scale(1.2);
   }
+   
+  .compra{
+    background: var(--color-dorado);
+    color: var(--color-blanco);
+    padding: 10px;
+    margin-top: 0px;
+    width: 90%;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+  }
   
+  .compra:hover {
+    background: #b79528;
+    box-shadow: var(--sombra-dorada);
+  }

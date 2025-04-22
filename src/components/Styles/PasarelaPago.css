@@ -1,0 +1,159 @@
+.overlay-pago {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(20, 20, 20, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal-pago {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1.2rem;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  .total-compra {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .metodos-pago {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+  
+  .metodo {
+    background-color: #f4f4f4;
+    border: 2px solid transparent;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .metodo:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .metodo.seleccionado {
+    border-color: #007bff;
+    background-color: #d0ebff;
+  }
+  
+  .btn-cerrar, .btn-confirmar, .btn-cancelar {
+    margin-top: 1rem;
+    padding: 0.6rem 1.4rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .btn-cerrar {
+    background-color: #ccc;
+  }
+  
+  .btn-confirmar {
+    background-color: #28a745;
+    color: white;
+    margin-right: 1rem;
+  }
+  
+  .btn-cancelar {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .botones-confirmacion {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .formulario-pago {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1rem;
+  }
+  
+  .formulario-pago input {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .btn-formulario {
+    background-color: #28a745;
+    color: white;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .btn-formulario:hover {
+    background-color: #28a745;
+  }
+
+
+  .mensaje-exito {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #2ecc71;
+    font-size: 1.5rem;
+    padding: 20px;
+  }
+  
+  .icono-verde {
+    font-size: 4rem;
+    color: #2ecc71;
+    animation: pulso 1s ease-in-out infinite;
+  }
+  
+  @keyframes pulso {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+
+  .mensaje-flotante {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    animation: aparecer 0.3s ease-in-out;
+  }
+  
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    } 
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+        
