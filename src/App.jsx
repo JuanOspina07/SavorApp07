@@ -21,7 +21,7 @@ function App({ setAuth }) {
   };
   
 
-  // Esta función se pasa al Header y se activa desde QueryModal
+
   const handlePriceFilter = ({ min, max }) => {
     setPriceFilter({ min, max });
   };
@@ -181,10 +181,11 @@ function App({ setAuth }) {
 
       {mostrarPasarela && (
         <PasarelaPago
-          total={totalCarrito}
-          onClose={() => setMostrarPasarela(false)}
-          onConfirm={handleConfirmarCompra}
-          vaciarCarrito={vaciarCarrito}
+        total={totalCarrito}
+        cart={cart} 
+        onClose={() => setMostrarPasarela(false)}
+        onConfirm={handleConfirmarCompra}
+        vaciarCarrito={vaciarCarrito}
         />
       )}
     </div>

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Styles/PasarelaPago.css';
-import { FaCreditCard, FaPaypal, FaMoneyBillWave } from 'react-icons/fa';
+import { FaCreditCard, FaPaypal, FaMoneyBillWave, FaQuestionCircle } from 'react-icons/fa';
 import confetti from 'canvas-confetti';
+import axios from 'axios';
 
-const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
+const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito, cart }) => {
+  const [mediosPago, setMediosPago] = useState([]);
   const [metodoSeleccionado, setMetodoSeleccionado] = useState('');
   const [formularioLlenado, setFormularioLlenado] = useState(false);
   const [pagoExitoso, setPagoExitoso] = useState(false);
@@ -12,6 +14,15 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
     numero: '',
     paypalCorreo: '',
   });
+
+  useEffect(() => {
+    axios.get('http://localhost:4000/api/medios-pago')
+      .then(res => {
+        console.log('Métodos de pago recibidos:', res.data);
+        setMediosPago(res.data);
+      })
+      .catch(err => console.error('Error al obtener métodos de pago:', err));
+  }, []);
 
   const seleccionarMetodo = (metodo) => {
     setMetodoSeleccionado(metodo);
@@ -27,8 +38,6 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
     e.preventDefault();
     setFormularioLlenado(true);
   };
-
-
   const lanzarConfeti = () => {
     confetti({
       particleCount: 100,
@@ -36,24 +45,42 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
       origin: { y: 0.6 },
     });
   };
-
   const confirmarCompra = () => {
     setPagoExitoso(true);
     lanzarConfeti();
+  
+    
+    const productosComprados = cart.map(item => ({
+      idproducto: item.idProducto,
+      cantidad: item.cantidad,
+    }));
+  
+    axios.post('http://localhost:4000/api/confirmar-compra', { productos: productosComprados })
+      .then(response => {
+        console.log('Productos a comprar:', productosComprados);
+        console.log('Compra confirmada y stock actualizado', response.data);
+  
+        if (typeof vaciarCarrito === 'function') {
+          vaciarCarrito(); 
+        }
 
+        onConfirm({ metodo: metodoSeleccionado, datos: datosPago });
+        onClose();
+      })
+      .catch(error => {
+        console.error('Error al confirmar la compra:', error);
+        setPagoExitoso(false);
+        alert('Hubo un error al procesar el pago. Intenta nuevamente.');
+      });
+  
     setTimeout(() => {
       setPagoExitoso(false);
-      if (typeof vaciarCarrito === 'function') {
-        vaciarCarrito(); // Vacía el carrito
-      }
-      onConfirm({ metodo: metodoSeleccionado, datos: datosPago });
-      onClose(); // Cierra la ventana
     }, 3000);
   };
 
   const renderFormulario = () => {
     switch (metodoSeleccionado) {
-      case 'Tarjeta de Crédito':
+      case 'Tarjeta Debito/Credito':
         return (
           <form onSubmit={enviarFormulario} className="formulario-pago">
             <input
@@ -75,7 +102,7 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
             <button className="btn-formulario">Continuar</button>
           </form>
         );
-      case 'PayPal':
+      case 'Paypal':
         return (
           <form onSubmit={enviarFormulario} className="formulario-pago">
             <input
@@ -89,7 +116,7 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
             <button className="btn-formulario">Continuar</button>
           </form>
         );
-      case 'Pago en Efectivo':
+      case 'Efectivo':
         return (
           <div className="formulario-pago">
             <p>Este pago se realizará en el punto físico.</p>
@@ -97,12 +124,30 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
           </div>
         );
       default:
-        return null;
+        return (
+          <div className="formulario-pago">
+            <p>No se requiere información adicional para este método.</p>
+            <button onClick={() => setFormularioLlenado(true)} className="btn-formulario">Confirmar</button>
+          </div>
+        );
+    }
+  };
+
+  const obtenerIcono = (nombre) => {
+    switch (nombre) {
+      case 'Tarjeta Debito/Credito':
+        return <FaCreditCard size={24} />;
+      case 'Paypal':
+        return <FaPaypal size={24} />;
+      case 'Efectivo':
+        return <FaMoneyBillWave size={24} />;
+      default:
+        return <FaQuestionCircle size={24} />;
     }
   };
 
   return (
-    <div className="overlay-pago">
+    <div className="pago">
       {pagoExitoso ? (
         <div className="mensaje-exito mensaje-flotante">
           <div className="icono-verde">✔</div>
@@ -112,20 +157,16 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito }) => {
         <div className="modal-pago">
           <h2>Pasarela de Pago</h2>
           <p className="total-compra">Total a pagar: <strong>${total.toLocaleString()}</strong></p>
-  
+
           {!metodoSeleccionado ? (
             <>
               <p>Selecciona un método de pago:</p>
               <div className="metodos-pago">
-                <button onClick={() => seleccionarMetodo('Tarjeta de Crédito')}>
-                  <FaCreditCard size={24} /> Tarjeta de Crédito
-                </button>
-                <button onClick={() => seleccionarMetodo('PayPal')}>
-                  <FaPaypal size={24} /> PayPal
-                </button>
-                <button onClick={() => seleccionarMetodo('Pago en Efectivo')}>
-                  <FaMoneyBillWave size={24} /> Efectivo
-                </button>
+                {mediosPago.map((medio, index) => (
+                  <button key={medio.idMetodoPago || index} onClick={() => seleccionarMetodo(medio.NombreMetodo)}>
+                    {obtenerIcono(medio.NombreMetodo)} {medio.NombreMetodo}
+                  </button>
+                ))}
               </div>
               <button className="btn-cerrar" onClick={onClose}>Cancelar</button>
             </>
