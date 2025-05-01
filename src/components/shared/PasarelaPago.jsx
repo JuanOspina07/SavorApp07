@@ -57,7 +57,7 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito, cart }) => {
   
     axios.post('http://localhost:4000/api/confirmar-compra', { productos: productosComprados })
       .then(response => {
-        console.log('Productos a comprar:', productosComprados);
+        console.log('Productos a comprar por el cliente:', productosComprados);
         console.log('Compra confirmada y stock actualizado', response.data);
   
         if (typeof vaciarCarrito === 'function') {
