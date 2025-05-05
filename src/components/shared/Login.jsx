@@ -20,9 +20,9 @@ function Login({ setAuth }) {
       });
 
       if (response.data.success) {
-        const { idRol, nombre, apellido } = response.data.user;
-
+        const { idUsuario,idRol, nombre, apellido } = response.data.user;
         localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("idUsuario", idUsuario);
         localStorage.setItem("idRol", idRol);
         localStorage.setItem("nombre", nombre);
         localStorage.setItem("apellido", apellido);

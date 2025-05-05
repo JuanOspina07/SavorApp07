@@ -191,3 +191,11 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+.mi-boton-confirmacion {
+  background-color: #d4af37 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+  font-weight: bold;
+  border: none;
+}
