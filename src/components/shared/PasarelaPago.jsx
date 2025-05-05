@@ -4,7 +4,7 @@ import { FaCreditCard, FaPaypal, FaMoneyBillWave, FaQuestionCircle } from 'react
 import confetti from 'canvas-confetti';
 import axios from 'axios';
 
-const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito, cart }) => {
+const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito, cart, idUsuario }) => {
   const [mediosPago, setMediosPago] = useState([]);
   const [metodoSeleccionado, setMetodoSeleccionado] = useState('');
   const [formularioLlenado, setFormularioLlenado] = useState(false);
@@ -38,6 +38,7 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito, cart }) => {
     e.preventDefault();
     setFormularioLlenado(true);
   };
+
   const lanzarConfeti = () => {
     confetti({
       particleCount: 100,
@@ -45,38 +46,72 @@ const PasarelaPago = ({ total, onClose, onConfirm, vaciarCarrito, cart }) => {
       origin: { y: 0.6 },
     });
   };
+
   const confirmarCompra = () => {
-    setPagoExitoso(true);
-    lanzarConfeti();
-  
-    
     const productosComprados = cart.map(item => ({
       idproducto: item.idProducto,
+      nombre: item.Nombre,
       cantidad: item.cantidad,
+      precio: item.Precio,
     }));
-  
+    console.log(idUsuario);
+
     axios.post('http://localhost:4000/api/confirmar-compra', { productos: productosComprados })
       .then(response => {
-        console.log('Productos a comprar por el cliente:', productosComprados);
         console.log('Compra confirmada y stock actualizado', response.data);
-  
-        if (typeof vaciarCarrito === 'function') {
-          vaciarCarrito(); 
-        }
 
-        onConfirm({ metodo: metodoSeleccionado, datos: datosPago });
-        onClose();
+        // Llamar a la API para enviar la factura
+        axios.post('http://localhost:4000/api/enviar-factura', {
+          idUsuario, 
+          detallesCompra: productosComprados,
+          metodoPago: metodoSeleccionado,
+          total,
+        })
+        
+          .then(() => {
+            console.log('Factura enviada con éxito');
+           
+          })
+          .catch(error => {
+            console.error('Error al enviar la factura:', error);
+            setPagoExitoso(false);
+            alert('Hubo un error al enviar la factura.');
+          });
+          console.log(idUsuario);
+          console.log({
+            idUsuario,
+            productosComprados,
+            metodoPago: metodoSeleccionado,
+            total
+          });
+          axios.post('http://localhost:4000/crear-pedido', {
+            idUsuario,
+            idEstado: 1, 
+            productos: productosComprados,
+            metodoPago: metodoSeleccionado,
+            total
+          })
+          .then(response => {
+            console.log('Pedido creado correctamente:', response.data);
+          lanzarConfeti();
+          setPagoExitoso(true);
+
+        // Mantén el mensaje de éxito visible por un tiempo antes de cerrar
+        setTimeout(() => {
+          if (typeof vaciarCarrito === 'function') {
+            vaciarCarrito();
+          }
+          onConfirm({ metodo: metodoSeleccionado, datos: datosPago });
+          onClose();  // Cerrar el modal después de un retraso
+        }, 2000);  // 2 segundos de espera
       })
       .catch(error => {
         console.error('Error al confirmar la compra:', error);
         setPagoExitoso(false);
-        alert('Hubo un error al procesar el pago. Intenta nuevamente.');
+        alert('Hubo un error ya que este producto esta agotado, escoge otro.');
       });
-  
-    setTimeout(() => {
-      setPagoExitoso(false);
-    }, 3000);
-  };
+  });
+}
 
   const renderFormulario = () => {
     switch (metodoSeleccionado) {

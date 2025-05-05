@@ -16,20 +16,22 @@ function App({ setAuth }) {
   const [priceFilter, setPriceFilter] = useState({ min: null, max: null });
   const [mensajeAgregado, setMensajeAgregado] = useState(false);
   const [totalCarrito, setTotalCarrito] = useState(0);
+  const [usuarioId, setUsuarioId] = useState(localStorage.getItem("idUsuario"));
+  const [mensajeError, setMensajeError] = useState(null);
+
+
   const vaciarCarrito = () => {
     setCart([]);
   };
-  
-
 
   const handlePriceFilter = ({ min, max }) => {
     setPriceFilter({ min, max });
   };
-  
+
   const [mostrarPasarela, setMostrarPasarela] = useState(false);
 
   const handleConfirmarCompra = (metodoPago) => {
-   setMostrarPasarela(false);
+    setMostrarPasarela(false);
     setShowCart(false);
     vaciarCarrito();
   };
@@ -60,37 +62,58 @@ function App({ setAuth }) {
       .catch((error) => console.error("Error filtrando productos", error));
   };
 
-  const productosFiltrados = productos
-    .filter((producto) =>
-      producto.Nombre.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .filter((producto) => {
-      console.log("Filtrando con:", priceFilter);
+  const productosFiltrados = productos.filter((producto) => {
+    const matchSearch = producto.Nombre.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchPrice = (() => {
       const { min, max } = priceFilter;
       const precio = Number(producto.Precio);
-
       if (min != null && max != null) return precio >= min && precio <= max;
       if (min != null) return precio >= min;
       if (max != null) return precio <= max;
       return true;
-    });
-
-  const addToCart = (producto) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item.idProducto === producto.idProducto);
-      if (existing) {
-        return prevCart.map((item) =>
-          item.idProducto === producto.idProducto
-            ? { ...item, cantidad: item.cantidad + 1 }
-            : item
-        );
-      } else {
-        return [...prevCart, { ...producto, cantidad: 1 }];
+    })();
+    return matchSearch && matchPrice;
+  });
+  const addToCart = async (producto) => {
+    const cantidadSolicitada = producto.cantidad || 1; // Si la cantidad no está definida, usa 1 por defecto
+  
+    // Verifica si el producto ya está en el carrito
+    const productoExistente = cart.find((item) => item.idProducto === producto.idProducto);
+    const cantidadTotal = productoExistente ? productoExistente.cantidad + cantidadSolicitada : cantidadSolicitada;
+  
+    try {
+      // Solicita la verificación del stock, pasando la cantidad total que el usuario desea
+      const res = await fetch(`http://localhost:4000/verificar-stock/${producto.idProducto}?cantidad=${cantidadTotal}`);
+      const data = await res.json();
+  
+      if (!data.success) {
+        setMensajeError("No hay suficientes ingredientes para este producto.");
+        setTimeout(() => setMensajeError(null), 3000);
+        return;
       }
-    });
-    setMensajeAgregado(true);
-    setTimeout(() => setMensajeAgregado(false), 1200);
+  
+      // Si hay stock disponible, agrega el producto al carrito
+      setCart((prevCart) => {
+        const existing = prevCart.find((item) => item.idProducto === producto.idProducto);
+        if (existing) {
+          return prevCart.map((item) =>
+            item.idProducto === producto.idProducto
+              ? { ...item, cantidad: item.cantidad + cantidadSolicitada }
+              : item
+          );
+        } else {
+          return [...prevCart, { ...producto, cantidad: cantidadSolicitada }];
+        }
+      });
+  
+      setMensajeAgregado(true);
+      setTimeout(() => setMensajeAgregado(false), 1200);
+    } catch (error) {
+      console.error("Error al verificar stock:", error);
+      alert("Hubo un error al verificar el stock.");
+    }
   };
+  
 
   const removeFromCart = (idProducto) => {
     setCart((prevCart) =>
@@ -140,14 +163,14 @@ function App({ setAuth }) {
           Todos
         </button>
         {categorias.map((categoria) => (
-          <button
-            key={categoria.IdCategoria}
-            className={`button32 ${categoriaSeleccionada === categoria.IdCategoria ? "active" : ""}`}
-            onClick={() => filtrarProductos(categoria.IdCategoria)}
-          >
-            {categoria.Nombre}
-          </button>
-        ))}
+  <button
+    key={categoria.IdCategoria}
+    className={`button32 ${categoriaSeleccionada === categoria.IdCategoria ? "active" : ""}`}
+    onClick={() => filtrarProductos(categoria.IdCategoria)}
+  >
+    {categoria.Nombre}
+  </button>
+))}
       </div>
 
       <div className="products-container">
@@ -181,13 +204,19 @@ function App({ setAuth }) {
 
       {mostrarPasarela && (
         <PasarelaPago
-        total={totalCarrito}
-        cart={cart} 
-        onClose={() => setMostrarPasarela(false)}
-        onConfirm={handleConfirmarCompra}
-        vaciarCarrito={vaciarCarrito}
+          total={totalCarrito}
+          cart={cart} 
+          onClose={() => setMostrarPasarela(false)}
+          onConfirm={handleConfirmarCompra}
+          vaciarCarrito={vaciarCarrito}
+          idUsuario={usuarioId}
         />
       )}
+      {mensajeError && (
+  <div className="mensaje-error-toast">
+    {mensajeError}
+  </div>
+)}
     </div>
   );
 }
