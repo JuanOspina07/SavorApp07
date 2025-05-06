@@ -1,0 +1,164 @@
+.PaginaCocinero {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .Fondo777, .Fondo7777 {
+    position: absolute;
+    top: 0;
+  }
+  
+  .Fondo7777 {
+    right: 0;
+  }
+  
+  .contenedor-central {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    width: 100%;
+    height: 85%;
+    padding: 0;
+    gap: 80px; 
+    margin-top: 50px;
+  }
+  
+  .contenedor {
+    width: 500px;
+    padding: 20px;
+    background-color: rgba(54,54,54,0.7);
+    border-radius: 40px;
+    backdrop-filter: blur(0px);
+    color: white;
+    overflow-y: auto;
+  }
+  
+
+  
+  .detalles {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+  }
+  
+  .tit{
+    font-size: 60px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #d4af37;
+    text-align: center;
+    color: #d4af37;
+  }
+
+.contenedor {
+  width: 500px;
+  padding: 25px;
+  background-color: rgba(54, 54, 54, 0.7);
+  border-radius: 30px;
+  backdrop-filter: blur(2px);
+  color: white;
+  overflow-y: auto;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.card-pedido {
+  padding: 18px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  font-size: 23px;
+  background-color: #fff;
+  color: black;
+  transition: transform 0.2s ease;
+}
+
+.card-pedido:nth-child(even) {
+  background-color: #d4af37;
+  color: #fff;
+}
+
+.card-pedido:hover {
+  transform: scale(1.02);
+}
+
+
+.card-pedido button {
+  background-color: #000; 
+  color: #d4af37;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.card-pedido button:hover {
+  background-color: #000;
+}
+
+
+.detalles {
+  transition: opacity 0.3s ease;
+  line-height: 1.5;
+  font-size: 18px;
+}
+
+.detalles ul {
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.detalles li {
+  margin-bottom: 10px;
+  color: #f1f1f1;
+}
+
+.detalles button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  bottom: 20px;
+  margin-top: 20px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.detalles button:hover {
+  background-color: #e60000;
+}
+  .boton-logout {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .boton-logout:hover {
+    background-color: #cc0000;
+  }
+  .oculto {
+    display: none;
+  }
+  
+  

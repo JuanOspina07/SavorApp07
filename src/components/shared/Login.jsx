@@ -32,11 +32,13 @@ function Login({ setAuth }) {
 
         switch (idRol) {
           case 1:
+            navigate("/menu");
+            break;
           case 2:
             navigate("/menu");
             break;
           case 3:
-            navigate("/cocinero");
+            navigate("/PaginaCocinero");
             break;
           default:
             setError("Rol no reconocido");

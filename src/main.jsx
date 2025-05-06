@@ -7,8 +7,10 @@ import App from "./App";
 import Login from "./components/shared/Login";
 import Registro from "./components/shared/Registro";
 import RecuperarContrasena from "./components/shared/RecuperarContrasena";
-import RestablecerContrasena from "./components/shared/RestablecerContrasena"; // ✅ Este era el que faltaba
+import RestablecerContrasena from "./components/shared/RestablecerContrasena";
+import CocineroPage from "./components/shared/PaginaCocinero" // ✅ Este era el que faltaba
 import "./index.css";
+
 
 function MainRouter() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,13 +34,15 @@ function MainRouter() {
             <Route path="/RecuperarContraseña" element={<RecuperarContrasena />} />
             <Route path="/recuperar/:token" element={<RecuperarContrasena />} />
             <Route path="/restablecer/:token" element={<RestablecerContrasena />} /> {/* ✅ Ruta corregida */}
+            <Route path="/PaginaCocinero" element={<CocineroPage />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         ) : (
           <>
             {idRol === 1 && <Route path="/menu" element={<App setAuth={setIsAuthenticated} />} />}
             {idRol === 2 && <Route path="/menu" element={<App setAuth={setIsAuthenticated} />} />}
-            {idRol === 3 && <Route path="/cocinero" element={<CocineroPage />} />}
+            { idRol === 3 && <Route path="/PaginaCocinero" element={<CocineroPage setAuth={setIsAuthenticated} />} /> }
+
             <Route
               path="*"
               element={
@@ -46,7 +50,7 @@ function MainRouter() {
                   to={
                     idRol === 1 ? "/menu" :
                     idRol === 2 ? "/menu" :
-                    idRol === 3 ? "/cocinero" : "/"
+                    idRol === 3 ? "/PaginaCocinero" : "/"
                   }
                 />
               }
