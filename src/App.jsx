@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "./components/shared/Sidebar";
 import Header from "./components/shared/Header";
 import "./components/Styles/App.css";
-import Carrito from "./components/shared/carrito";
+import Carrito from "./components/shared/Carrito";
 import PasarelaPago from './components/shared/PasarelaPago';
 
 function App({ setAuth }) {
