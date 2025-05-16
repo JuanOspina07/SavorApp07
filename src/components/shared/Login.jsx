@@ -35,7 +35,7 @@ function Login({ setAuth }) {
             navigate("/menu");
             break;
           case 2:
-            navigate("/menu");
+            navigate("/PaginaAdmin");
             break;
           case 3:
             navigate("/PaginaCocinero");
