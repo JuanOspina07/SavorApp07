@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   RiHome6Line,
-  RiPieChartLine,
   RiNotification3Line,
   RiLogoutCircleRLine,
 } from "react-icons/ri";
@@ -10,12 +9,26 @@ import "../Styles/Sidebar.css";
 
 const Sidebar = ({ setAuth }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isHovered, setIsHovered] = useState(false);
+  const [activeButton, setActiveButton] = useState("menu");
+
+  // Sincroniza el botón activo con la ruta actual
+  useEffect(() => {
+    if (location.pathname === "/menu") {
+      setActiveButton("menu");
+    } else if (location.pathname === "/Pedidos") {
+      setActiveButton("pedidos");
+    }
+  }, [location.pathname]);
 
   const handleLogout = () => {
     localStorage.clear();
     if (setAuth) setAuth(false);
     navigate("/", { replace: true });
+  };
+  const handlePedido = () => {
+    navigate("/Pedidos", { replace: true });
   };
 
   return (
@@ -26,18 +39,40 @@ const Sidebar = ({ setAuth }) => {
     >
       <div>
         <ul>
-          <li className="active">
-            <a href="#">
+          <li className={activeButton === "menu" ? "active" : ""}>
+            <button
+              className="sidebar-link"
+              onClick={() => navigate("/menu")}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <RiHome6Line className="icon" />
               {isHovered && <span className="menu-text">Inicio</span>}
-            </a>
+            </button>
           </li>
-         
-          <li>
-            <a href="#">
+
+          <li className={activeButton === "pedidos" ? "active" : ""}>
+            <button
+              className="sidebar-link"
+              onClick={handlePedido}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <RiNotification3Line className="icon" />
               {isHovered && <span className="menu-text">Notificaciones</span>}
-            </a>
+            </button>
           </li>
         </ul>
       </div>

@@ -1,0 +1,70 @@
+.tabla-stock-container {
+  width: 60%;
+  margin: 70px auto;
+  overflow-x: auto;
+  overflow-y: auto; 
+  max-height: 500px; 
+  border-radius: 15px;
+  box-shadow: 0 0 18px 0 rgba(212, 175, 55, 0.25);
+  background: rgba(34, 34, 34, 0.95);
+  padding: 10px 0;
+  scrollbar-color: #d4af37 #222; 
+  scrollbar-width: thin;
+}
+
+.tabla-stock-container::-webkit-scrollbar {
+  height: 8px;
+  background: #222;
+  border-radius: 8px;
+}
+.tabla-stock-container::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 8px;
+}
+
+.tabla-stock {
+  width: 100%;
+  border-collapse: separate; 
+  border-spacing: 16px 0px;   
+  min-width: 400px;
+  background: transparent;
+}
+
+.tabla-stock th, .tabla-stock td {
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.tabla-stock th {
+  background: #d4af37;
+  color: #222;
+  font-size: 18px;
+  letter-spacing: 1px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.tabla-stock tr {
+  border-bottom: 1px solid #d4af37;
+  transition: background 0.2s;
+}
+
+.tabla-stock tr:hover {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.tabla-stock td {
+  color: #fff;
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  .tabla-stock-container {
+    padding: 0;
+    width: 99%;
+  }
+  .tabla-stock th, .tabla-stock td {
+    font-size: 14px;
+    padding: 10px 4px;
+  }
+}

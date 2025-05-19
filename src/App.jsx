@@ -142,7 +142,24 @@ function App({ setAuth }) {
       <Sidebar showMenu={showMenu} setAuth={setAuth} />
       <div className="header3">
         <Header setShowCart={setShowCart} onSearch={setSearchQuery} onFilter={handlePriceFilter} />
+          {/* Menú desplegable de categorías */}
+     
       </div>
+       <div className="categories-container">
+        <select
+          className="category-select"
+          value={categoriaSeleccionada || ""}
+          onChange={e => filtrarProductos(e.target.value === "" ? null : Number(e.target.value))}
+        >
+          <option value="">Todos</option>
+          {categorias.map((categoria) => (
+            <option key={categoria.IdCategoria} value={categoria.IdCategoria}>
+              {categoria.Nombre}
+            </option>
+          ))}
+        </select>
+      </div>
+      
 
       {showCart && (
         <Carrito
@@ -155,23 +172,7 @@ function App({ setAuth }) {
         />
       )}
 
-      <div className="categories-container">
-        <button
-          className={`button32 ${categoriaSeleccionada === null ? "active" : ""}`}
-          onClick={() => filtrarProductos(null)}
-        >
-          Todos
-        </button>
-        {categorias.map((categoria) => (
-  <button
-    key={categoria.IdCategoria}
-    className={`button32 ${categoriaSeleccionada === categoria.IdCategoria ? "active" : ""}`}
-    onClick={() => filtrarProductos(categoria.IdCategoria)}
-  >
-    {categoria.Nombre}
-  </button>
-))}
-      </div>
+    
 
       <div className="products-container">
         {productos.length === 0 ? (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RiSearch2Line } from "react-icons/ri";
+import { RiSearch2Line, RiMoneyDollarCircleLine } from "react-icons/ri";
 import "../Styles/Header.css";
 import QueryModal from "./QueryModal";
 
@@ -28,13 +28,17 @@ const Header = ({ setShowCart, onSearch, onFilter }) => {
   return (
     <header>
       <div className="header-container">
-        <div>
+        <div className="header-row">
           <h1 className="header-title">
             Bienvenido, {nombre} {apellido}
           </h1>
-          <p className="header-date">{new Date().toLocaleDateString()}</p>
+          <span className="header-date">{new Date().toLocaleDateString()}</span>
         </div>
+        
         <form className="search-form" onSubmit={(e) => e.preventDefault()}>
+          <span className="search-icon">
+            <RiSearch2Line size={20} />
+          </span>
           <input
             type="text"
             className="search-input"
@@ -42,14 +46,22 @@ const Header = ({ setShowCart, onSearch, onFilter }) => {
             value={searchTerm}
             onChange={handleSearch}
           />
+        </form>
+        <div className="header-actions">
           <button
             type="button"
             className="filter-btn"
             onClick={() => setShowQueryModal(true)}
           >
-            <RiSearch2Line size={20} />
+            <RiMoneyDollarCircleLine size={22} />
           </button>
-        </form>
+          <button
+            className="add-to-cart-btn2"
+            onClick={() => setShowCart((prev) => !prev)}
+          >
+            <img src="carrito.png" alt="Carrito" />
+          </button>
+        </div>
 
         <QueryModal
           className="modal-overlay"
@@ -57,13 +69,6 @@ const Header = ({ setShowCart, onSearch, onFilter }) => {
           onClose={() => setShowQueryModal(false)}
           onFilter={handleFilter}
         />
-
-        <button
-          className="add-to-cart-btn2"
-          onClick={() => setShowCart((prev) => !prev)}
-        >
-          <img src="carrito.png" alt="Carrito" />
-        </button>
       </div>
     </header>
   );
