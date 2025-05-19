@@ -15,6 +15,7 @@ import VerStock from "./components/shared/VerStock";
 import AñadirProductos from "./components/shared/añadirProductos";
 import EliminarProducto from "./components/shared/EliminarProducto";
 import VerEstadisticas from "./components/shared/VerEstadisticas";
+import PedidosCliente from "./components/shared/PedidosCliente";
 
 
 
@@ -53,8 +54,8 @@ function MainRouter() {
           <>
             {idRol === 1 && <Route path="/menu" element={<App setAuth={setIsAuthenticated} />} />}
             {idRol === 2 && <Route path="/PaginaAdmin" element={<PaginaAdmin setAuth={setIsAuthenticated} />} />}
-            { idRol === 3 && <Route path="/PaginaCocinero" element={<CocineroPage setAuth={setIsAuthenticated} />} /> }
-
+            {idRol === 3 && <Route path="/PaginaCocinero" element={<CocineroPage setAuth={setIsAuthenticated} />} />}
+            <Route path="/Pedidos" element={<PedidosCliente setAuth={setIsAuthenticated} />} />
             <Route
               path="*"
               element={

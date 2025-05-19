@@ -8,6 +8,7 @@ export function CocineroPage({ setAuth }) {
   const [pedidos, setPedidos] = useState([]);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [detallePedido, setDetallePedido] = useState([]);
+  const [filtroEstado, setFiltroEstado] = useState("En cola");
 
   const navigate = useNavigate();
 
@@ -48,6 +49,50 @@ export function CocineroPage({ setAuth }) {
     setDetallePedido([]);
   };
 
+  const estadoNombreANumero = (nombreEstado) => {
+    switch (nombreEstado) {
+      case "En cola":
+        return 1;
+      case "En preparación":
+        return 2;
+      case "Listo para entregar":
+        return 3;
+      case "Entregado":
+        return 4;
+      default:
+        return 1; // Por defecto
+    }
+  };
+
+  const actualizarEstadoPedido = () => {
+    if (!pedidoSeleccionado) return;
+    const estadoActual = estadoNombreANumero(pedidoSeleccionado.nombreEstado);
+    const nuevoEstado = Math.min(estadoActual + 1, 4);
+    fetch(`http://localhost:4000/api/pedidos/${pedidoSeleccionado.idPedido}/estado`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idEstado: nuevoEstado }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPedidos((prev) =>
+          prev.map((p) =>
+            p.idPedido === pedidoSeleccionado.idPedido
+              ? { ...p, nombreEstado: data.nombreEstado }
+              : p
+          )
+        );
+        setPedidoSeleccionado((prev) =>
+          prev
+            ? { ...prev, nombreEstado: data.nombreEstado }
+            : prev
+        );
+      })
+      .catch((err) => {
+        console.error("Error al actualizar estado:", err);
+      });
+  };
+
   return (
     <div className="PaginaCocinero">
       <img className="Fondo777" src="SAVORAFONDO.JPG" alt="Fondo Cocinero" />
@@ -63,14 +108,38 @@ export function CocineroPage({ setAuth }) {
       <div className="contenedor-central">
         <div className="contenedor pedidos">
           <h2 className="tit">PEDIDOS</h2>
-          {pedidos.map((pedido) => (
-            <div key={pedido.idPedido} className="card-pedido">
-              <span>
-                {pedido.idPedido} - {pedido.nombreUsuario} ({pedido.nombreEstado})
-              </span>
-              <button onClick={() => mostrarDetalle(pedido)}>Ver Detalle</button>
-            </div>
-          ))}
+
+          {/* Filtro por estado */}
+          <div className="filtro-estado-botones">
+  {["En cola", "En preparación", "Listo para entregar", "Entregado"].map((estado) => (
+    <button
+      key={estado}
+      className={`filtro-btn${filtroEstado === estado ? " activo" : ""}`}
+      onClick={() => setFiltroEstado(estado)}
+      type="button"
+    >
+      {estado}
+    </button>
+  ))}
+</div>
+
+          {/* Solo mostrar pedidos que coinciden con el filtro seleccionado */}
+          {pedidos
+            .filter((pedido) => pedido.nombreEstado === filtroEstado)
+            .map((pedido) => (
+              <div key={pedido.idPedido} className="card-pedido">
+                <span>
+                  #{pedido.idPedido} {pedido.nombreUsuario} ({pedido.nombreEstado})
+                  <br />
+                  <small>
+                    {pedido.FechaPedido
+                      ? new Date(pedido.FechaPedido).toLocaleString()
+                      : ""}
+                  </small>
+                </span>
+                <button onClick={() => mostrarDetalle(pedido)}>Ver Detalle</button>
+              </div>
+            ))}
         </div>
 
         <div className={`contenedor detalles ${detalleActivo ? "" : "oculto"}`}>
@@ -89,7 +158,13 @@ export function CocineroPage({ setAuth }) {
           ) : (
             <p>No hay detalles disponibles.</p>
           )}
-          <button onClick={cerrarDetalle}>Cerrar</button>
+       
+          {pedidoSeleccionado && estadoNombreANumero(pedidoSeleccionado.nombreEstado) < 4 && (
+  <button onClick={actualizarEstadoPedido}>
+    Avanzar al siguiente estado
+  </button>
+)}
+          <button className="close-btn" onClick={cerrarDetalle}>Cerrar</button>
         </div>
       </div>
     </div>

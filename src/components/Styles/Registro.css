@@ -199,3 +199,33 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: bold;
   border: none;
 }
+
+/* Responsive para tablets */
+@media (max-width: 1024px) {
+  .container2 {
+    width: 60%;
+    height: 80%;
+    top: 10%;
+    right: 20%;
+    left: 20%;
+    margin: 0 auto;
+    position: fixed;
+    overflow-y: auto;
+  }
+}
+
+/* Responsive para celulares */
+@media (max-width: 600px) {
+  .container2 {
+    width: 90%;
+    height: 85%;
+    top: 7%;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    position: fixed;
+    overflow-y: auto;
+    border-radius: 25px;
+    padding: 10px;
+  }
+}

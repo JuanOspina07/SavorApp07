@@ -212,3 +212,62 @@ label {
 .modal-content button:hover {
   background-color: #bfa134;
 }
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .ContainerLogin {
+    width: 50%;
+    left: 25%;
+    top: 15%;
+    height: auto;
+    padding: 30px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ContainerLogin {
+    width: 80%;
+    left: 10%;
+    top: 10%;
+    padding: 25px 5px;
+    border-radius: 25px;
+  }
+  .ContainerLogin h2 {
+    font-size: 22px;
+  }
+  .inputfield {
+    font-size: 16px;
+    height: 45px;
+  }
+  .button1 {
+    font-size: 16px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ContainerLogin {
+    width: 95%;
+    left: 2.5%;
+    top: 5%;
+    padding: 15px 2px;
+    border-radius: 15px;
+  }
+  .ContainerLogin h2 {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+  .inputfield {
+    font-size: 14px;
+    height: 38px;
+    padding-inline: 10px 20px;
+  }
+  .button1 {
+    font-size: 14px;
+    padding: 6px;
+    border-radius: 12px;
+  }
+  .modal-content {
+    padding: 10px 5px;
+    max-width: 95vw;
+  }
+}
