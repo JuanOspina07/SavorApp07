@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/shared/Sidebar";
 import Header from "./components/shared/Header";
 import "./components/Styles/App.css";
 import Carrito from "./components/shared/Carrito";
 import PasarelaPago from './components/shared/PasarelaPago';
+import PedidosCliente from "./components/shared/PedidosCliente";
 
 function App({ setAuth }) {
+  const navigate = useNavigate();
+
   const [showMenu, setShowMenu] = useState(false);
   const [categorias, setCategorias] = useState([]);
   const [productos, setProductos] = useState([]);
@@ -18,7 +22,12 @@ function App({ setAuth }) {
   const [totalCarrito, setTotalCarrito] = useState(0);
   const [usuarioId, setUsuarioId] = useState(localStorage.getItem("idUsuario"));
   const [mensajeError, setMensajeError] = useState(null);
+  const [pedidos, setPedidos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [prevListos, setPrevListos] = useState(0);
 
+  const estados = ["En cola", "En preparación", "Listo para entregar", "Entregado"];
 
   const vaciarCarrito = () => {
     setCart([]);
@@ -137,15 +146,67 @@ function App({ setAuth }) {
     setTotalCarrito(total);
   }, [cart]);
 
+  const idusuario = localStorage.getItem("idUsuario");
+
+  useEffect(() => {
+    if (!idusuario) {
+      setError("No hay usuario autenticado.");
+      setLoading(false);
+      return;
+    }
+    fetch(`http://localhost:4000/pedidos?usuario=${idusuario}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener pedidos");
+        return res.json();
+      })
+      .then((data) => {
+        setPedidos(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [idusuario]);
+
+  // Notificaciones y sonido
+  useEffect(() => {
+    const pedidosListos = pedidos.filter(
+      (p) => p.nombreEstado?.toLowerCase() === "listo para entregar"
+    );
+    if (pedidosListos.length > prevListos) {
+      const audio = new Audio("../../public/Noti.mp3");
+    
+      audio.play();
+    }
+    setPrevListos(pedidosListos.length);
+    // eslint-disable-next-line
+  }, [pedidos]);
+
+  const pedidosListos = pedidos.filter(
+    (p) => p.nombreEstado?.toLowerCase() === "listo para entregar"
+  );
+
+  // Verifica si el usuario está autenticado
+  useEffect(() => {
+    const idusuario = localStorage.getItem("idUsuario");
+    if (!idusuario) {
+      setAuth && setAuth(false);
+      navigate("/login", { replace: true });
+    }
+  }, []);
+
   return (
     <div className="container3">
-      <Sidebar showMenu={showMenu} setAuth={setAuth} />
+     
+      <Sidebar setAuth={setAuth} notificaciones={pedidosListos.length} />
       <div className="header3">
         <Header setShowCart={setShowCart} onSearch={setSearchQuery} onFilter={handlePriceFilter} />
           {/* Menú desplegable de categorías */}
      
       </div>
        <div className="categories-container">
+         <img className="Fondo777" src="SAVORAFONDO.JPG" alt="Fondo Cocinero" />
         <select
           className="category-select"
           value={categoriaSeleccionada || ""}
@@ -172,36 +233,51 @@ function App({ setAuth }) {
         />
       )}
 
-    
+      {mensajeAgregado && (
+  <div className="mensaje-agregado">¡Producto añadido al carrito!</div>
+)}
 
-      <div className="products-container">
-        {productos.length === 0 ? (
-          <p className="no-results-message">No se pudieron cargar los productos.</p>
-        ) : productosFiltrados.length === 0 ? (
-          <p className="no-results-message">No se encontraron productos que coincidan con tu búsqueda.</p>
-        ) : (
-          productosFiltrados.map((producto) => (
-            <div key={producto.idProducto} className="product-card">
-              <img
-                src={producto.Imagen}
-                className="product-image"
-                alt={producto.Nombre}
-              />
-              <h3 className="product-title">{producto.Nombre}</h3>
-              <span className="product-price">${producto.Precio}</span>
-              <button className="add-to-cart-btn" onClick={() => addToCart(producto)}>
-                <img src="añadir.png" alt="Agregar al carrito" />
-              </button>
-              {mensajeAgregado && (
-                <div className="mensaje-agregado">¡Producto añadido al carrito!</div>
-              )}
-              <div className="product-description">
-                <p>{producto.Descripcion}</p>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <div className="products-container">
+                {productos.length === 0 ? (
+                  <p className="no-results-message">No se pudieron cargar los productos.</p>
+                ) : productosFiltrados.length === 0 ? (
+                  <p className="no-results-message">No se encontraron productos que coincidan con tu búsqueda.</p>
+                ) : (
+                  productosFiltrados.map((producto) => (
+                    <div key={producto.idProducto} className="product-card">
+                      <img
+                        src={producto.Imagen}
+                        className="product-image"
+                        alt={producto.Nombre}
+                      />
+                      <h3 className="product-title">{producto.Nombre}</h3>
+                      <span className="product-price">${producto.Precio}</span>
+                      <button className="add-to-cart-btn" onClick={() => addToCart(producto)}>
+                        <img src="añadir.png" alt="Agregar al carrito" />
+                      </button>
+                      <div className="product-description">
+                        <p>{producto.Descripcion}</p>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
-            </div>
-          ))
-        )}
-      </div>
+            </>
+          }
+        />
+        <Route
+          path="/pedidos"
+          element={
+            <PedidosCliente pedidos={pedidos} loading={loading} error={error} />
+          }
+        />
+        {/* ...otras rutas... */}
+      </Routes>
 
       {mostrarPasarela && (
         <PasarelaPago

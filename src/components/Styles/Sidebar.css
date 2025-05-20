@@ -1,20 +1,22 @@
 /* Estilos generales para la barra lateral */
 .sidebar {
-  background-color: #000000;
+  background: linear-gradient(135deg, #181818 60%, #23243a 100%);
+  box-shadow: 4px 0 24px 0 #00000055;
   position: fixed;
   top: 0;
   left: 0;
-  width: 5rem; /* Ancho por defecto cuando está colapsado */
+  width: 3.9rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1.5rem 0;
-  border-top-right-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
   z-index: 50;
-  transition: all 0.3s ease;
-  overflow: hidden; /* Asegura que los textos no se desborden */
+  transition: all 0.35s cubic-bezier(.4,2,.3,1);
+  overflow: hidden;
+  border-right: 2px solid #d4af37;
 }
 
 /* Cuando el sidebar está expandido */
@@ -24,12 +26,15 @@
 
 /* Los iconos deben ser visibles incluso cuando la barra está colapsada */
 .icon {
-  font-size: 1.8rem; /* Ajusta el tamaño si lo necesitas */
-  margin-right: 0.5rem; /* Espacio entre icono y texto */
+  font-size: 1.8rem !important; /* Fuerza el tamaño siempre igual */
+  min-width: 1.8rem;
+  min-height: 1.8rem;
+  margin-right: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d4af37; /* Color de los íconos */
+  color: #d4af37;
+  transition: color 0.3s;
 }
 
 .sidebar a:hover .icon {
@@ -85,6 +90,8 @@
 .sidebar li:hover {
   color: white;
   background-color: #262837;
+  border-left: #d4af37 5px solid;
+  /* Elimina el padding aquí para no afectar el tamaño del icono */
 }
 
 .sidebar a, .sidebar button {
@@ -97,6 +104,7 @@
   text-decoration: none;
   border: none;
   cursor: pointer;
+  background: none;
 }
 
 /* Estilos de los íconos */
@@ -173,6 +181,39 @@
     opacity: 1;
     margin-left: 0.5rem;
   }
+}
+
+@keyframes titilar-rojo {
+  0% { filter: brightness(1.1) drop-shadow(0 0 8px #ff2222); }
+  100% { filter: brightness(1.7) drop-shadow(0 0 2px #ff2222); }
+}
+
+.notificacion-badge {
+  position: absolute;
+  top: -10px;
+  right: 100px;
+  min-width: 12px;
+  height: 30px;
+  background: linear-gradient(135deg, #ff5858 60%, #ffb347 100%);
+  color: #fff;
+  border-radius: 100%;
+  padding: 0 6px;
+  font-size: 1.05em;
+  font-weight: bold;
+  box-shadow: 0 2px 10px #ffb34788, 0 0 0 2px #d4af37;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bounce 1.2s infinite, titilar-rojo 1s infinite alternate;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.18); }
+  60% { transform: scale(0.95); }
 }
 
 

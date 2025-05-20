@@ -1,13 +1,12 @@
 .pedidos-cliente {
-  background: #232323;
   min-height: 100vh;
-  padding: 40px 0 40px 220px; /* Espacio para el sidebar */
   font-family: 'Segoe UI', Arial, sans-serif;
+  margin-bottom: 50px;
 }
 
 .pedidos-cliente h2 {
   color: #d4af37;
-  font-size: 2.1rem;
+  font-size: 4.1rem;
   margin-bottom: 28px;
   letter-spacing: 1px;
   font-weight: 600;
@@ -15,14 +14,18 @@
   text-align: center;
 }
 
-.pedidos-cliente ul {
+/* Nuevo: solo afecta a la lista de pedidos */
+.pedidos-lista {
   list-style: none;
   padding: 0;
   margin: 0 auto;
-  max-width: 520px;
+  max-width: 700px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 }
 
-.pedidos-cliente li {
+.pedidos-lista li {
   background: rgba(54, 54, 54, 0.85);
   border-radius: 18px;
   box-shadow: 0 2px 8px rgba(212, 175, 55, 0.10);
@@ -34,11 +37,6 @@
   flex-direction: column;
   gap: 8px;
   transition: box-shadow 0.18s, transform 0.18s;
-}
-
-.pedidos-cliente li:hover {
-  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.18);
-  transform: scale(1.025);
 }
 
 .pedidos-cliente strong {
@@ -107,17 +105,72 @@
 .progress-bar-segment.filled {
   background: linear-gradient(120deg, #d4af37 70%, #b8860b 100%);
   box-shadow: 0 0 18px 2px #d4af37, 0 0 8px #fff70055 inset;
-  animation: titilar 1s infinite alternate;
+
 }
 
-.progress-bar-segment:not(:first-child) {
-  border-left: 4px solid #232323;
+.progress-bar-segment.filled.estado-1 {
+  background: #d4af37;
+  box-shadow: 0 0 12px 2px #d4af37, 0 0 8px #fff70055 inset;
 }
 
-@keyframes titilar {
-  0% { filter: brightness(1.1) drop-shadow(0 0 8px #d4af37); }
-  100% { filter: brightness(1.7) drop-shadow(0 0 22px #fff700); }
+.progress-bar-segment.filled.estado-2 {
+  background: linear-gradient(90deg, #d4af37 0%, #d48c37 100%);
+  box-shadow: 0 0 12px 2px #d48c37, 0 0 8px #fff70055 inset;
 }
+
+.progress-bar-segment.filled.estado-3 {
+  background: linear-gradient(90deg, #d48c37 0%, #d46637 100%);
+  box-shadow: 0 0 12px 2px #d46637, 0 0 8px #fff70055 inset;
+}
+
+.progress-bar-segment.filled.estado-4 {
+  background: linear-gradient(90deg, #d46637 0%, #d43737 100%);
+  box-shadow: 0 0 12px 2px #d43737, 0 0 8px #fff70055 inset;
+}
+
+.progress-bar-segment.siguiente {
+  position: relative;
+  overflow: hidden;
+  background: #111; /* Fondo oscuro fijo */
+  
+}
+
+.progress-bar-segment.siguiente::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  z-index: 3;
+  /* El color lo define cada estado abajo */
+  animation: barra-progreso-anim 6s infinite alternate;
+  border-radius: 0 14px 14px 0;
+  
+}
+
+.progress-bar-segment.siguiente.estado-1::after {
+  background: #d4af37;
+  animation: barra-progreso-anim 6s infinite alternate;
+}
+.progress-bar-segment.siguiente.estado-2::after {
+  background: linear-gradient(90deg, #d4af37 0%, #d48c37 100%);
+  animation: barra-progreso-anim 6s infinite alternate;
+}
+.progress-bar-segment.siguiente.estado-3::after {
+  background: linear-gradient(90deg, #d48c37 0%, #d46637 100%);
+  animation: barra-progreso-anim 6s infinite alternate;
+}
+.progress-bar-segment.siguiente.estado-4::after {
+  background: linear-gradient(90deg, #d46637 0%, #d43737 100%);
+  animation: barra-progreso-anim 6s infinite alternate;
+}
+
+@keyframes barra-progreso-anim {
+  0% { width: 0%; }
+  60% { width: 100%; }
+  100% { width: 0%; }
+}
+
+
 
 /* Responsive para móviles */
 @media (max-width: 600px) {
@@ -127,8 +180,43 @@
   .pedidos-cliente ul {
     max-width: 98vw;
   }
+  .pedidos-lista {
+    grid-template-columns: 1fr;
+  }
   .pedidos-cliente li {
     padding: 12px 8px;
     font-size: 1rem;
   }
+}
+
+@media (max-width: 900px) {
+  .pedidos-lista {
+    grid-template-columns: 1fr;
+    max-width: 98vw;
+    gap: 12px;
+  }
+  .pedidos-cliente li {
+    padding: 14px 8px;
+    font-size: 1.05rem;
+  }
+}
+
+.notificacion-badge {
+  position: absolute;
+  top: -4px;
+  right: 10px; /* Más a la izquierda */
+  width: 20px;
+  height: 20px;
+  background: #ff2222;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78em;
+  font-weight: bold;
+  box-shadow: 0 0 6px #fff;
+  animation: titilar-rojo 1s infinite alternate;
+  pointer-events: none;
+  padding: 0; /* Elimina el padding para asegurar el círculo */
 }

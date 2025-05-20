@@ -26,8 +26,9 @@ const Carrito = ({ cart, addToCart, removeFromCart, deleteFromCart, setShowCart,
                     <img src="menos.png" alt="eliminar del carrito" />
                     </button>
                     <span>{item.cantidad}</span>
-                    <button className="eliminar-item" onClick={() => addToCart(item)}><img src="mas.png" alt="sumar al carrito" />
-                    </button>
+                    <button className="eliminar-item" onClick={() => addToCart({ ...item, cantidad: 1 })}>
+  <img src="mas.png" alt="sumar al carrito" />
+</button>
                     <button className="eliminar-item" onClick={() => deleteFromCart(item.idProducto)}>
                     <img src="eliminar.png" alt="eliminar del carrito" />
 </button>
