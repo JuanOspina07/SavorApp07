@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"; // Agrega useEffect aquí
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 import "../Styles/Registro.css";
 
 
@@ -84,9 +85,14 @@ function Registro() {
 
   const handleRegister = async (event) => {
     event.preventDefault();
-    
+
     if (isNaN(edad) || edad <= 0) {
-      alert("Por favor, ingrese una edad válida.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Edad inválida',
+        text: 'Por favor, ingrese una edad válida.',
+        confirmButtonColor: '#d4af37'
+      });
       return;
     }
   
@@ -118,11 +124,21 @@ function Registro() {
         throw new Error(errorText);
       }
 
-      alert("Registro exitoso");
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Registro exitoso!',
+        text: 'Tu cuenta ha sido creada correctamente.',
+        confirmButtonColor: '#d4af37'
+      });
       navigate("/login");
     } catch (error) {
       console.error("Error en el registro:", error);
-      alert(`Error en el registro: ${error.message}`);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el registro',
+        text: error.message,
+        confirmButtonColor: '#d4af37'
+      });
     }
   };
   

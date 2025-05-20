@@ -7,7 +7,7 @@ import {
 } from "react-icons/ri";
 import "../Styles/Sidebar.css";
 
-const Sidebar = ({ setAuth }) => {
+const Sidebar = ({ setAuth, notificaciones }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isHovered, setIsHovered] = useState(false);
@@ -24,8 +24,8 @@ const Sidebar = ({ setAuth }) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    if (setAuth) setAuth(false);
-    navigate("/", { replace: true });
+    if (setAuth) setAuth(false); // Si usas estado de autenticación
+    navigate("/login", { replace: true }); // Redirige siempre al login
   };
   const handlePedido = () => {
     navigate("/Pedidos", { replace: true });
@@ -68,9 +68,13 @@ const Sidebar = ({ setAuth }) => {
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
+                position: "relative",
               }}
             >
               <RiNotification3Line className="icon" />
+              {notificaciones > 0 && (
+                <span className="notificacion-badge">{notificaciones}</span>
+              )}
               {isHovered && <span className="menu-text">Notificaciones</span>}
             </button>
           </li>
