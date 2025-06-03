@@ -12,7 +12,7 @@ import CocineroPage from "./components/shared/PaginaCocinero"
 import PaginaAdmin from "./components/shared/PaginaAdmin"  // ✅ Este era el que faltaba
 import "./index.css";
 import VerStock from "./components/shared/VerStock";
-import AñadirProductos from "./components/shared/añadirProductos";
+import AñadirProductos from "./components/shared/AñadirProductos";
 import EliminarProducto from "./components/shared/EliminarProducto";
 import VerEstadisticas from "./components/shared/VerEstadisticas";
 import PedidosCliente from "./components/shared/PedidosCliente";
